@@ -10,6 +10,7 @@ import (
 	"github.com/bots-go-framework/bots-fw-telegram-models/botsfwtgmodels"
 	"github.com/bots-go-framework/bots-fw-telegram/telegram"
 	"github.com/dal-go/dalgo/dal"
+	"github.com/dal-go/record"
 )
 
 const chatInstancesCollection = "chatInstances"
@@ -57,12 +58,12 @@ func (s *ChatInstanceStore) db(ctx context.Context) (dal.DB, error) {
 }
 
 // NewChatInstanceKey creates the historical Telegram chat-instance key.
-func NewChatInstanceKey(chatInstanceID string) *dal.Key {
+func NewChatInstanceKey(chatInstanceID string) *record.Key {
 	if chatInstanceID == "" {
 		panic("chat instance ID is required")
 	}
-	platformKey := dal.NewKeyWithID("botPlatforms", telegram.PlatformID)
-	return dal.NewKeyWithParentAndID(platformKey, chatInstancesCollection, chatInstanceID)
+	platformKey := record.NewKeyWithID("botPlatforms", telegram.PlatformID)
+	return record.NewKeyWithParentAndID(platformKey, chatInstancesCollection, chatInstanceID)
 }
 
 func (s *ChatInstanceStore) Get(ctx context.Context, botCode, chatInstanceID string) (botsfwtgmodels.TgChatInstanceData, bool, error) {
@@ -74,8 +75,8 @@ func (s *ChatInstanceStore) Get(ctx context.Context, botCode, chatInstanceID str
 	if data == nil {
 		return nil, false, nil
 	}
-	if err := db.Get(ctx, dal.NewRecordWithData(NewChatInstanceKey(chatInstanceID), data)); err != nil {
-		if dal.IsNotFound(err) {
+	if err := db.Get(ctx, record.NewRecordWithData(NewChatInstanceKey(chatInstanceID), data)); err != nil {
+		if record.IsNotFound(err) {
 			return nil, false, nil
 		}
 		return nil, false, err
@@ -89,6 +90,6 @@ func (s *ChatInstanceStore) Save(ctx context.Context, _ string, chatInstanceID s
 		return err
 	}
 	return db.RunReadwriteTransaction(ctx, func(ctx context.Context, tx dal.ReadwriteTransaction) error {
-		return tx.Set(ctx, dal.NewRecordWithData(NewChatInstanceKey(chatInstanceID), data))
+		return tx.Set(ctx, record.NewRecordWithData(NewChatInstanceKey(chatInstanceID), data))
 	})
 }
