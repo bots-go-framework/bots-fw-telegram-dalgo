@@ -3,7 +3,7 @@ module github.com/bots-go-framework/bots-fw-telegram-dalgo
 go 1.25
 
 require (
-	github.com/bots-go-framework/bots-fw-telegram v0.28.1
+	github.com/bots-go-framework/bots-fw-telegram v0.28.2
 	github.com/bots-go-framework/bots-fw-telegram-models v0.3.71
 	github.com/dal-go/dalgo v0.63.1
 )
