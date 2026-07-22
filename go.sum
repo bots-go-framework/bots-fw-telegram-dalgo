@@ -6,8 +6,8 @@ github.com/bits-and-blooms/bitset v1.24.4 h1:95H15Og1clikBrKr/DuzMXkQzECs1M6hhoG
 github.com/bits-and-blooms/bitset v1.24.4/go.mod h1:7hO7Gc7Pp1vODcmWvKMRA9BNmbv6a/7QIWpPxHddWR8=
 github.com/bots-go-framework/bots-api-telegram v0.15.3 h1:4xl63ze602NRoe/qjH6UApb6SoX300jcR+vYU0AEL+g=
 github.com/bots-go-framework/bots-api-telegram v0.15.3/go.mod h1:39UsWl1UWzNTsRMFkWMOCsUyRN8PpUfgR4S942T5Sr0=
-github.com/bots-go-framework/bots-fw v0.76.0 h1:H1H3p68Fsnfa2wYtqyxE0LVoaLlYg43mNAgZhrBlki4=
-github.com/bots-go-framework/bots-fw v0.76.0/go.mod h1:gaVE8BOn9IUdCwbk38ik6RQ5SGBoeMNAyg9li6yBoO0=
+github.com/bots-go-framework/bots-fw v0.76.1 h1:3VmlPjKbUqU+ktOgLT02sUeQaEC6imjSgYjlgsXH41M=
+github.com/bots-go-framework/bots-fw v0.76.1/go.mod h1:gaVE8BOn9IUdCwbk38ik6RQ5SGBoeMNAyg9li6yBoO0=
 github.com/bots-go-framework/bots-fw-store v0.12.0 h1:oz2tCpsiTZ2WdeQhkG3H4vq44N24kxBUzXg1ie2nrRU=
 github.com/bots-go-framework/bots-fw-store v0.12.0/go.mod h1:0yS6Pg516jHIrIInv+kvWRWxXNGGqR4tlvRua8GfT20=
 github.com/bots-go-framework/bots-fw-telegram v0.28.1 h1:wYKMckAsR/hacdzi2IJIWQlF/rw1yGyHdpKLeMGc51w=

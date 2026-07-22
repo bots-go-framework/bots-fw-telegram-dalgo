@@ -13,7 +13,7 @@ require (
 	github.com/alexsergivan/transliterator v1.0.1 // indirect
 	github.com/bits-and-blooms/bitset v1.24.4 // indirect
 	github.com/bots-go-framework/bots-api-telegram v0.15.3 // indirect
-	github.com/bots-go-framework/bots-fw v0.76.0 // indirect
+	github.com/bots-go-framework/bots-fw v0.76.1 // indirect
 	github.com/bots-go-framework/bots-fw-store v0.12.0 // indirect
 	github.com/bots-go-framework/bots-go-core v0.2.5 // indirect
 	github.com/dal-go/record v0.1.0
