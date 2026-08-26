@@ -10,7 +10,7 @@ import (
 )
 
 func TestChatInstanceStore_RoundTripUsesExistingKeyLayout(t *testing.T) {
-	store := NewChatInstanceStore(dalgo2memory.NewDB(), func(string) botsfwtgmodels.TgChatInstanceData {
+	store := NewChatInstanceStore(dalgo2memory.New(dalgo2memory.FirestoreProfile()), func(string) botsfwtgmodels.TgChatInstanceData {
 		return &botsfwtgmodels.TgChatInstanceBaseData{}
 	})
 	data := &botsfwtgmodels.TgChatInstanceBaseData{TgChatID: -100, PreferredLanguage: "en-US"}
