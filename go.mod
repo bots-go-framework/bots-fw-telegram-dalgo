@@ -2,7 +2,7 @@ module github.com/bots-go-framework/bots-fw-telegram-dalgo
 
 go 1.26.0
 
-toolchain go1.27.0
+toolchain go1.27.3
 
 require (
 	github.com/bots-go-framework/bots-fw-telegram v0.33.5
