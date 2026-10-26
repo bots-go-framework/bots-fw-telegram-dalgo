@@ -8,7 +8,7 @@ require (
 	github.com/bots-go-framework/bots-fw-telegram v0.33.5
 	github.com/bots-go-framework/bots-fw-telegram-models v0.3.75
 	github.com/dal-go/dalgo v0.74.1
-	github.com/dal-go/record v0.1.3
+	github.com/dal-go/record v0.1.5
 )
 
 require (
