@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
 	"testing"
 
 	"github.com/bots-go-framework/bots-fw-telegram-models/botsfwtgmodels"
@@ -140,4 +141,58 @@ func TestChatInstanceStore_RoundTripUsesExistingKeyLayout(t *testing.T) {
 	if storedKey.Collection() != chatInstancesCollection || storedKey.Parent().Collection() != "botPlatforms" || fmt.Sprint(storedKey.Parent().ID) != "telegram" {
 		t.Fatalf("chat-instance key changed: %v", storedKey)
 	}
+}
+
+func TestConfiguredChatInstancesExcludeOtherParents(t *testing.T) {
+	db := dalgo2memory.New(dalgo2memory.FirestoreProfile())
+	ctx := context.Background()
+	for _, parent := range []*record.Key{record.NewKeyWithID("botPlatforms", "telegram"), record.NewKeyWithParentAndID(record.NewKeyWithID("ext", "foreign"), "platforms", "telegram")} {
+		if err := db.RunReadwriteTransaction(ctx, func(ctx context.Context, tx dal.ReadwriteTransaction) error {
+			return tx.Set(ctx, record.NewRecordWithData(chatInstanceKey(parent, "same"), &botsfwtgmodels.TgChatInstanceBaseData{TgChatID: 77}))
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	parent := record.NewKeyWithParentAndID(record.NewKeyWithID("ext", "owner"), "platforms", "telegram")
+	store := NewChatInstanceStoreWithProviderOptions(func(context.Context) (dal.DB, error) { return db, nil }, dummyNewData, WithPlatformKey(parent))
+	parent.Parent().ID = "mutated"
+	if _, found, err := store.Get(ctx, "bot", "same"); err != nil || found {
+		t.Fatal(found, err)
+	}
+	if err := store.Save(ctx, "bot", "same", &botsfwtgmodels.TgChatInstanceBaseData{TgChatID: 88}); err != nil {
+		t.Fatal(err)
+	}
+	got, found, err := store.Get(ctx, "bot", "same")
+	if err != nil || !found || got.GetTgChatID() != 88 {
+		t.Fatal(got, found, err)
+	}
+	legacy := NewChatInstanceStore(db, dummyNewData)
+	got, found, err = legacy.Get(ctx, "bot", "same")
+	if err != nil || !found || got.GetTgChatID() != 77 {
+		t.Fatal(got, found, err)
+	}
+}
+func TestConfiguredChatInstanceRejectsInvalidPlatform(t *testing.T) {
+	for _, key := range []*record.Key{nil, record.NewIncompleteKey("platforms", reflect.String, nil)} {
+		func() {
+			defer func() {
+				if recover() == nil {
+					t.Error("missing panic")
+				}
+			}()
+			WithPlatformKey(key)
+		}()
+	}
+}
+
+type invalidPlatformID string
+
+func (invalidPlatformID) Validate() error { return errors.New("invalid platform") }
+func TestConfiguredChatInstanceRejectsInvalidTypedID(t *testing.T) {
+	defer func() {
+		if recover() == nil {
+			t.Fatal("invalid platform accepted")
+		}
+	}()
+	WithPlatformKey(record.NewKeyWithID("platforms", invalidPlatformID("bad")))
 }

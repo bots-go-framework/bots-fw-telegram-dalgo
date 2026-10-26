@@ -15,11 +15,12 @@ import (
 
 const chatInstancesCollection = "chatInstances"
 
-// ChatInstanceStore preserves the established
-// botPlatforms/telegram/chatInstances/{chatInstance} storage layout.
+// ChatInstanceStore stores chat instances beneath its configured platform.
+// Unconfigured stores retain botPlatforms/telegram for existing deployments.
 type ChatInstanceStore struct {
-	getDB   DBProvider
-	newData func(botCode string) botsfwtgmodels.TgChatInstanceData
+	getDB       DBProvider
+	newData     func(botCode string) botsfwtgmodels.TgChatInstanceData
+	platformKey *record.Key
 }
 
 // DBProvider returns the DALgo database for a request context.
@@ -37,13 +38,22 @@ func NewChatInstanceStore(db dal.DB, newData func(botCode string) botsfwtgmodels
 // NewChatInstanceStoreWithProvider creates a store whose database is selected
 // for each request.
 func NewChatInstanceStoreWithProvider(getDB DBProvider, newData func(botCode string) botsfwtgmodels.TgChatInstanceData) *ChatInstanceStore {
+	return NewChatInstanceStoreWithProviderOptions(getDB, newData)
+}
+
+// NewChatInstanceStoreWithProviderOptions configures one request-scoped store.
+func NewChatInstanceStoreWithProviderOptions(getDB DBProvider, newData func(botCode string) botsfwtgmodels.TgChatInstanceData, opts ...ChatInstanceStoreOption) *ChatInstanceStore {
 	if getDB == nil {
 		panic("getDB is required")
 	}
 	if newData == nil {
 		panic("newData is required")
 	}
-	return &ChatInstanceStore{getDB: getDB, newData: newData}
+	s := &ChatInstanceStore{getDB: getDB, newData: newData, platformKey: record.NewKeyWithID("botPlatforms", telegram.PlatformID)}
+	for _, opt := range opts {
+		opt(s)
+	}
+	return s
 }
 
 func (s *ChatInstanceStore) db(ctx context.Context) (dal.DB, error) {
@@ -59,10 +69,13 @@ func (s *ChatInstanceStore) db(ctx context.Context) (dal.DB, error) {
 
 // NewChatInstanceKey creates the historical Telegram chat-instance key.
 func NewChatInstanceKey(chatInstanceID string) *record.Key {
+	return chatInstanceKey(record.NewKeyWithID("botPlatforms", telegram.PlatformID), chatInstanceID)
+}
+
+func chatInstanceKey(platformKey *record.Key, chatInstanceID string) *record.Key {
 	if chatInstanceID == "" {
 		panic("chat instance ID is required")
 	}
-	platformKey := record.NewKeyWithID("botPlatforms", telegram.PlatformID)
 	return record.NewKeyWithParentAndID(platformKey, chatInstancesCollection, chatInstanceID)
 }
 
@@ -75,7 +88,7 @@ func (s *ChatInstanceStore) Get(ctx context.Context, botCode, chatInstanceID str
 	if data == nil {
 		return nil, false, nil
 	}
-	if err := db.Get(ctx, record.NewRecordWithData(NewChatInstanceKey(chatInstanceID), data)); err != nil {
+	if err := db.Get(ctx, record.NewRecordWithData(chatInstanceKey(s.platformKey, chatInstanceID), data)); err != nil {
 		if record.IsNotFound(err) {
 			return nil, false, nil
 		}
@@ -90,6 +103,32 @@ func (s *ChatInstanceStore) Save(ctx context.Context, _ string, chatInstanceID s
 		return err
 	}
 	return db.RunReadwriteTransaction(ctx, func(ctx context.Context, tx dal.ReadwriteTransaction) error {
-		return tx.Set(ctx, record.NewRecordWithData(NewChatInstanceKey(chatInstanceID), data))
+		return tx.Set(ctx, record.NewRecordWithData(chatInstanceKey(s.platformKey, chatInstanceID), data))
 	})
+}
+
+// ChatInstanceStoreOption configures one store without changing global defaults.
+type ChatInstanceStoreOption func(*ChatInstanceStore)
+
+// WithPlatformKey fixes the exact owner for this store, with no fallback reads.
+func WithPlatformKey(key *record.Key) ChatInstanceStoreOption {
+	if key == nil {
+		panic("platform key is required")
+	}
+	for parent := key; parent != nil; parent = parent.Parent() {
+		if parent.ID == nil {
+			panic("complete platform key is required")
+		}
+		if err := parent.Validate(); err != nil {
+			panic(err)
+		}
+	}
+	saved := copyKey(key)
+	return func(s *ChatInstanceStore) { s.platformKey = copyKey(saved) }
+}
+func copyKey(key *record.Key) *record.Key {
+	if key == nil {
+		return nil
+	}
+	return record.NewKeyWithParentAndID(copyKey(key.Parent()), key.Collection(), key.ID)
 }
