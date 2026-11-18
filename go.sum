@@ -30,6 +30,8 @@ github.com/dal-go/dalgo v0.102.1 h1:voADMd0BsSjUZ3W6SKXshVoylUC/VfC5hD+LGEOcHDc=
 github.com/dal-go/dalgo v0.102.1/go.mod h1:UCGV7G50rWbXamWXbmbBGmHiACWtNYUFNIL+qM5AAs8=
 github.com/dal-go/dalgo v0.102.4 h1:uBo0umBtoRlLx2oScrkbFwfKA9f8inlk+jz15UvEi1s=
 github.com/dal-go/dalgo v0.102.4/go.mod h1:W4lltVHe1hqTLFYDNAJFif0tGAIYZgZhgLZXiadD+y0=
+github.com/dal-go/dalgo v0.102.5 h1:4+nj4GTySS4EiUboGBmNCsahfY0EKBL323HliAVbbuY=
+github.com/dal-go/dalgo v0.102.5/go.mod h1:KmMQvq9i/7sz2bCH859CbQqgx2XalOi7n1oWMhWMYlc=
 github.com/dal-go/record v0.1.5 h1:lkPxiJA7S2oE5tA0WUayezd+lmaiEekrEcGz/HRhzLg=
 github.com/dal-go/record v0.1.5/go.mod h1:PuoOCH74/Vf+pIVWSdrMg7OdUmlSlPgj68yJ+gM42To=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -58,6 +60,8 @@ github.com/strongo/strongoapp v0.31.73 h1:jGGOtAsWIQRI0E4/1JvJSTMR6IY530H3AZ/h4x
 github.com/strongo/strongoapp v0.31.73/go.mod h1:0Ltjf42dz/iiOCu6fy0+NhElC4vP6WUWkf8NXTpZWms=
 github.com/strongo/validation v0.0.17 h1:xIYI58B+82ai7vBJc4wKpj2KLDFC9L/PpkzmSZHHRzU=
 github.com/strongo/validation v0.0.17/go.mod h1:95QitYgp3A+Yq5p5dpylCgFi6nglCIkUcF8pC7Xh3qw=
+github.com/strongo/validation v0.0.18 h1:RlSCPsgAYaNU+jl4XDhbaQQn4fNoyNGIUd/fh5EcfXM=
+github.com/strongo/validation v0.0.18/go.mod h1:lyS4a8AddH+6xB7omJN6Ycx/oetqTkQD7vJvDQ71+EI=
 github.com/technoweenie/multipartstreamer v1.0.1 h1:XRztA5MXiR1TIRHxH2uNxXxaIkKQDeX7m2XsSOlQEnM=
 github.com/technoweenie/multipartstreamer v1.0.1/go.mod h1:jNVxdtShOxzAsukZwTSw6MDx5eUJoiEBsSvzDU9uzog=
 go.uber.org/mock v0.6.0 h1:hyF9dfmbgIX5EfOdasqLsWD6xqpNZlXblLB/Dbnwv3Y=
