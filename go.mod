@@ -6,7 +6,7 @@ toolchain go1.27.4
 
 require (
 	github.com/bots-go-framework/bots-fw-telegram v0.33.5
-	github.com/bots-go-framework/bots-fw-telegram-models v0.3.98
+	github.com/bots-go-framework/bots-fw-telegram-models v0.3.99
 	github.com/dal-go/dalgo v0.102.6
 	github.com/dal-go/record v0.1.5
 )
@@ -25,7 +25,7 @@ require (
 	github.com/strongo/logus v0.4.1 // indirect
 	github.com/strongo/random v0.0.3 // indirect
 	github.com/strongo/slice v0.3.15 // indirect
-	github.com/strongo/strongoapp v0.31.73 // indirect
+	github.com/strongo/strongoapp v0.31.74 // indirect
 	github.com/strongo/validation v0.0.18 // indirect
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	golang.org/x/sys v0.30.0 // indirect
